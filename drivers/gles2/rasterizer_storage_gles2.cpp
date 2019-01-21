@@ -54,7 +54,11 @@ GLuint RasterizerStorageGLES2::system_fbo = 0;
 
 #define _EXT_TEXTURE_CUBE_MAP_SEAMLESS 0x884F
 
+#ifdef JAVASCRIPT_ENABLED
+#define _DEPTH_COMPONENT24_OES 0x84FA /* WEBGL_depth_texture extension */
+#else
 #define _DEPTH_COMPONENT24_OES 0x81A6
+#endif
 
 #define _RED_OES 0x1903
 
