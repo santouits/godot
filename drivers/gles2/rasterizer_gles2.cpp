@@ -171,8 +171,10 @@ Error RasterizerGLES2::is_viable() {
 // GLVersion seems to be used for both GL and GL ES, so we need different version checks for them
 #ifdef OPENGL_ENABLED // OpenGL 2.1 Profile required
 	if (GLVersion.major < 2 || (GLVersion.major == 2 && GLVersion.minor < 1)) {
+		ERR_PRINTS(vformat("This system only supports OpenGL %d.%d, while OpenGL 2.1 is required.", GLVersion.major, GLVersion.minor));
 #else // OpenGL ES 2.0
 	if (GLVersion.major < 2) {
+		ERR_PRINTS(vformat("This system only supports OpenGL ES  %d.%d, while OpenGL ES 2.0 is required.", GLVersion.major, GLVersion.minor));
 #endif
 		return ERR_UNAVAILABLE;
 	}
@@ -200,6 +202,7 @@ Error RasterizerGLES2::is_viable() {
 			glGetFramebufferAttachmentParameteriv = glGetFramebufferAttachmentParameterivEXT;
 			glGenerateMipmap = glGenerateMipmapEXT;
 		} else {
+			ERR_PRINTS("ARB_framebuffer_object or EXT_framebuffer_object extension is required.");
 			return ERR_UNAVAILABLE;
 		}
 	}
