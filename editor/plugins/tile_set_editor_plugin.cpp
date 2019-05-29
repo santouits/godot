@@ -836,7 +836,7 @@ void TileSetEditor::_on_workspace_draw() {
 						anchor += WORKSPACE_MARGIN;
 						anchor += region.position;
 						uint32_t mask = tileset->autotile_get_bitmask(get_current_tile(), coord);
-						if (tileset->autotile_get_bitmask_mode(get_current_tile()) == TileSet::BITMASK_2X2) {
+						if (tileset->autotile_get_bitmask_mode(get_current_tile()) == TileSet::BITMASK_2X2 || tileset->autotile_get_bitmask_mode(get_current_tile()) == TileSet::BITMASK_2X2_EDGES) {
 							if (mask & TileSet::BIND_IGNORE_TOPLEFT) {
 								workspace->draw_rect(Rect2(anchor, size / 4), ci);
 								workspace->draw_rect(Rect2(anchor + size / 4, size / 4), ci);
@@ -1278,7 +1278,7 @@ void TileSetEditor::_on_workspace_input(const Ref<InputEvent> &p_ie) {
 								Vector2 pos(coord.x * (spacing + size.x), coord.y * (spacing + size.y));
 								pos = mb->get_position() - (pos + current_tile_region.position);
 								uint32_t bit = 0;
-								if (tileset->autotile_get_bitmask_mode(get_current_tile()) == TileSet::BITMASK_2X2) {
+								if (tileset->autotile_get_bitmask_mode(get_current_tile()) == TileSet::BITMASK_2X2 || tileset->autotile_get_bitmask_mode(get_current_tile()) == TileSet::BITMASK_2X2_EDGES) {
 									if (pos.x < size.x / 2) {
 										if (pos.y < size.y / 2) {
 											bit = TileSet::BIND_TOPLEFT;
@@ -1356,7 +1356,7 @@ void TileSetEditor::_on_workspace_input(const Ref<InputEvent> &p_ie) {
 							Vector2 pos(coord.x * (spacing + size.x), coord.y * (spacing + size.y));
 							pos = mm->get_position() - (pos + current_tile_region.position);
 							uint32_t bit = 0;
-							if (tileset->autotile_get_bitmask_mode(get_current_tile()) == TileSet::BITMASK_2X2) {
+							if (tileset->autotile_get_bitmask_mode(get_current_tile()) == TileSet::BITMASK_2X2 || tileset->autotile_get_bitmask_mode(get_current_tile()) == TileSet::BITMASK_2X2_EDGES) {
 								if (pos.x < size.x / 2) {
 									if (pos.y < size.y / 2) {
 										bit = TileSet::BIND_TOPLEFT;
@@ -3336,7 +3336,7 @@ void TilesetEditorContext::_get_property_list(List<PropertyInfo> *p_list) const 
 		p_list->push_back(PropertyInfo(Variant::COLOR, "tile_modulate"));
 		p_list->push_back(PropertyInfo(Variant::INT, "tile_tile_mode", PROPERTY_HINT_ENUM, "SINGLE_TILE,AUTO_TILE,ATLAS_TILE"));
 		if (tileset->tile_get_tile_mode(id) == TileSet::AUTO_TILE) {
-			p_list->push_back(PropertyInfo(Variant::INT, "tile_autotile_bitmask_mode", PROPERTY_HINT_ENUM, "2X2,3X3 (minimal),3X3"));
+			p_list->push_back(PropertyInfo(Variant::INT, "tile_autotile_bitmask_mode", PROPERTY_HINT_ENUM, "2X2,2X2 (edges),3X3 (minimal),3X3"));
 			p_list->push_back(PropertyInfo(Variant::VECTOR2, "tile_subtile_size"));
 			p_list->push_back(PropertyInfo(Variant::INT, "tile_subtile_spacing", PROPERTY_HINT_RANGE, "0, 256, 1"));
 		} else if (tileset->tile_get_tile_mode(id) == TileSet::ATLAS_TILE) {
