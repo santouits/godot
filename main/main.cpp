@@ -60,6 +60,7 @@
 #include "main/tests/test_main.h"
 #include "modules/register_module_types.h"
 #include "platform/register_platform_apis.h"
+#include "scene/2d/canvas_item.h"
 #include "scene/main/scene_tree.h"
 #include "scene/main/viewport.h"
 #include "scene/register_scene_types.h"
@@ -338,6 +339,8 @@ Error Main::setup(const char *execpath, int argc, char *argv[], bool p_second_ph
 	ClassDB::init();
 
 	MAIN_PRINT("Main: Initialize CORE");
+
+	CanvasItemQueue::init();
 
 	register_core_types();
 	register_core_driver_types();
@@ -1921,6 +1924,7 @@ bool Main::iteration() {
 	}
 	message_queue->flush();
 
+	CanvasItemQueue::flush();
 	VisualServer::get_singleton()->sync(); //sync if still drawing from previous frames.
 
 	if (OS::get_singleton()->can_draw() && !disable_render_loop) {
@@ -2099,6 +2103,8 @@ void Main::cleanup() {
 		OS::get_singleton()->execute(exec, args, false, &pid);
 		OS::get_singleton()->set_restart_on_exit(false, List<String>()); //clear list (uses memory)
 	}
+
+	CanvasItemQueue::free();
 
 	unregister_core_driver_types();
 	unregister_core_types();

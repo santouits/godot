@@ -38,6 +38,7 @@
 #include "scene/resources/shader.h"
 #include "scene/resources/texture.h"
 
+class CanvasItemQueue;
 class CanvasLayer;
 class Viewport;
 class Font;
@@ -177,6 +178,7 @@ public:
 	};
 
 private:
+	friend class CanvasItemQueue;
 	mutable SelfList<Node> xform_change;
 
 	RID canvas_item;
@@ -389,5 +391,18 @@ public:
 };
 
 VARIANT_ENUM_CAST(CanvasItem::BlendMode);
+
+class CanvasItemQueue {
+public:
+	static void init();
+	static void flush();
+	static void add(ObjectID id);
+	static void free();
+
+private:
+	static ObjectID *data;
+	static int length;
+	static int allocated_length;
+};
 
 #endif // CANVAS_ITEM_H

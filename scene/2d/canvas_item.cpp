@@ -636,7 +636,7 @@ void CanvasItem::update() {
 
 	pending_update = true;
 
-	MessageQueue::get_singleton()->push_call(this, "_update_callback");
+	CanvasItemQueue::add(get_instance_id());
 }
 
 void CanvasItem::set_modulate(const Color &p_modulate) {
@@ -1326,4 +1326,42 @@ CanvasItem::CanvasItem() :
 CanvasItem::~CanvasItem() {
 
 	VisualServer::get_singleton()->free(canvas_item);
+}
+
+ObjectID *CanvasItemQueue::data = NULL;
+int CanvasItemQueue::length = 0;
+int CanvasItemQueue::allocated_length = 0;
+
+void CanvasItemQueue::init() {
+	// allocate some memory for data
+	CanvasItemQueue::data = (ObjectID *)memalloc(sizeof(ObjectID) * 1000);
+	allocated_length = 1000;
+}
+
+void CanvasItemQueue::flush() {
+	// iterate the vector and update the object
+	for (int i = 0; i < length; ++i) {
+		CanvasItem *ci = (CanvasItem *)ObjectDB::get_instance(data[i]);
+		if (ci != NULL) {
+			ci->_update_callback();
+		}
+	}
+
+	// set length to 0
+	length = 0;
+}
+
+void CanvasItemQueue::add(ObjectID id) {
+	// Check if there is space in the vector and if there isn't duplicate the size and move the content there
+	if (length == allocated_length) {
+		data = (ObjectID *)memrealloc(data, (allocated_length * 2) * sizeof(ObjectID));
+		allocated_length *= 2;
+	}
+	// add the id on the end of the vector and iterate the length
+	data[length++] = id;
+}
+
+void CanvasItemQueue::free() {
+	memfree(data);
+	data = NULL;
 }
