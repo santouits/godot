@@ -69,9 +69,12 @@ def configure(env):
             exec(f.read(), em_config)
         except StandardError as e:
             raise RuntimeError("Emscripten configuration file '%s' is invalid:\n%s" % (em_config_file, e))
-    if 'EMSCRIPTEN_ROOT' not in em_config:
-        raise RuntimeError("'EMSCRIPTEN_ROOT' missing in Emscripten configuration file '%s'" % em_config_file)
-    env.PrependENVPath('PATH', em_config['EMSCRIPTEN_ROOT'])
+    if 'EMSCRIPTEN_ROOT' in em_config:
+        env.PrependENVPath('PATH', em_config['EMSCRIPTEN_ROOT'])
+    elif 'EMSDK' in os.environ:
+        env.PrependENVPath('PATH', os.getenv('EMSDK'))
+    else:
+        raise RuntimeError("'EMSDK' not set and 'EMSCRIPTEN_ROOT' missing in Emscripten configuration file '%s'" % em_config_file)
 
     env['CC'] = 'emcc'
     env['CXX'] = 'em++'
