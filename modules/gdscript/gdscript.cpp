@@ -191,21 +191,36 @@ bool GDScript::can_instance() const {
 }
 
 Ref<Script> GDScript::get_base_script() const {
+#ifndef NO_THREADS
+	mutex->lock();
+#endif
+	Ref<Script> ret = _base;
+#ifndef NO_THREADS
+	mutex->unlock();
+#endif
 
-	if (_base) {
-		return Ref<GDScript>(_base);
+	if (ret.is_valid()) {
+		return Ref<GDScript>(ret);
 	} else {
 		return Ref<Script>();
 	}
 }
 
 StringName GDScript::get_instance_base_type() const {
+#ifndef NO_THREADS
+	mutex->lock();
+#endif
+	StringName ret;
 
 	if (native.is_valid())
-		return native->get_name();
+		ret = native->get_name();
 	if (base.is_valid())
-		return base->get_instance_base_type();
-	return StringName();
+		ret = base->get_instance_base_type();
+#ifndef NO_THREADS
+	mutex->unlock();
+#endif
+
+	return ret;
 }
 
 struct _GDScriptMemberSort {
@@ -219,11 +234,21 @@ struct _GDScriptMemberSort {
 
 void GDScript::_placeholder_erased(PlaceHolderScriptInstance *p_placeholder) {
 
+#ifndef NO_THREADS
+	mutex->lock();
+#endif
 	placeholders.erase(p_placeholder);
+#ifndef NO_THREADS
+	mutex->unlock();
+#endif
+
 }
 #endif
 
 void GDScript::get_script_method_list(List<MethodInfo> *p_list) const {
+#ifndef NO_THREADS
+	mutex->lock();
+#endif
 
 	const GDScript *current = this;
 	while (current) {
@@ -241,9 +266,15 @@ void GDScript::get_script_method_list(List<MethodInfo> *p_list) const {
 
 		current = current->_base;
 	}
+#ifndef NO_THREADS
+	mutex->unlock();
+#endif
 }
 
 void GDScript::get_script_property_list(List<PropertyInfo> *p_list) const {
+#ifndef NO_THREADS
+	mutex->lock();
+#endif
 
 	const GDScript *sptr = this;
 	List<PropertyInfo> props;
@@ -273,11 +304,21 @@ void GDScript::get_script_property_list(List<PropertyInfo> *p_list) const {
 	for (List<PropertyInfo>::Element *E = props.front(); E; E = E->next()) {
 		p_list->push_back(E->get());
 	}
+#ifndef NO_THREADS
+	mutex->unlock();
+#endif
 }
 
 bool GDScript::has_method(const StringName &p_method) const {
+#ifndef NO_THREADS
+	mutex->lock();
+#endif
+	bool ret = member_functions.has(p_method);
+#ifndef NO_THREADS
+	mutex->unlock();
+#endif
 
-	return member_functions.has(p_method);
+	return ret;
 }
 
 MethodInfo GDScript::get_method_info(const StringName &p_method) const {
@@ -338,7 +379,13 @@ ScriptInstance *GDScript::instance_create(Object *p_this) {
 PlaceHolderScriptInstance *GDScript::placeholder_instance_create(Object *p_this) {
 #ifdef TOOLS_ENABLED
 	PlaceHolderScriptInstance *si = memnew(PlaceHolderScriptInstance(GDScriptLanguage::get_singleton(), Ref<Script>(this), p_this));
+#ifndef NO_THREADS
+	mutex->lock();
+#endif
 	placeholders.insert(si);
+#ifndef NO_THREADS
+	mutex->unlock();
+#endif
 	_update_exports();
 	return si;
 #else
@@ -361,20 +408,45 @@ bool GDScript::instance_has(const Object *p_this) const {
 }
 
 bool GDScript::has_source_code() const {
+#ifndef NO_THREADS
+	mutex->lock();
+#endif
+	bool ret;
+	if (source == "")
+		ret = false;
+	else
+		ret = true;
 
-	return source != "";
+#ifndef NO_THREADS
+	mutex->unlock();
+#endif
+
+	return ret;
 }
 String GDScript::get_source_code() const {
+#ifndef NO_THREADS
+	mutex->lock();
+#endif
+	String ret = source;
 
-	return source;
+#ifndef NO_THREADS
+	mutex->unlock();
+#endif
+	return ret;
 }
 void GDScript::set_source_code(const String &p_code) {
 
-	if (source == p_code)
-		return;
-	source = p_code;
+#ifndef NO_THREADS
+	mutex->lock();
+#endif
+	if (source != p_code) {
+		source = p_code;
 #ifdef TOOLS_ENABLED
-	source_changed_cache = true;
+		source_changed_cache = true;
+#endif
+	}
+#ifndef NO_THREADS
+	mutex->unlock();
 #endif
 }
 
@@ -830,11 +902,17 @@ Error GDScript::load_source_code(const String &p_path) {
 		ERR_FAIL_V(ERR_INVALID_DATA);
 	}
 
+#ifndef NO_THREADS
+	mutex->lock();
+#endif
 	source = s;
 #ifdef TOOLS_ENABLED
 	source_changed_cache = true;
 #endif
 	path = p_path;
+#ifndef NO_THREADS
+	mutex->unlock();
+#endif
 	return OK;
 }
 
@@ -855,24 +933,43 @@ StringName GDScript::debug_get_member_by_index(int p_idx) const {
 }
 
 Ref<GDScript> GDScript::get_base() const {
+#ifndef NO_THREADS
+	mutex->lock();
+#endif
+	Ref<GDScript> ret = base;
+#ifndef NO_THREADS
+	mutex->unlock();
+#endif
 
-	return base;
+	return ret;
 }
 
 bool GDScript::has_script_signal(const StringName &p_signal) const {
-	if (_signals.has(p_signal))
-		return true;
-	if (base.is_valid()) {
-		return base->has_script_signal(p_signal);
+	bool ret = false;
+
+#ifndef NO_THREADS
+	mutex->lock();
+#endif
+	if (_signals.has(p_signal)) {
+		ret = true;
+	} else if (base.is_valid()) {
+		ret = base->has_script_signal(p_signal);
 	}
 #ifdef TOOLS_ENABLED
 	else if (base_cache.is_valid()) {
-		return base_cache->has_script_signal(p_signal);
+		ret =  base_cache->has_script_signal(p_signal);
 	}
 #endif
-	return false;
+
+#ifndef NO_THREADS
+	mutex->unlock();
+#endif
+	return ret;
 }
 void GDScript::get_script_signal_list(List<MethodInfo> *r_signals) const {
+#ifndef NO_THREADS
+	mutex->lock();
+#endif
 
 	for (const Map<StringName, Vector<StringName> >::Element *E = _signals.front(); E; E = E->next()) {
 
@@ -894,6 +991,9 @@ void GDScript::get_script_signal_list(List<MethodInfo> *r_signals) const {
 		base_cache->get_script_signal_list(r_signals);
 	}
 
+#endif
+#ifndef NO_THREADS
+	mutex->unlock();
 #endif
 }
 
@@ -922,9 +1022,16 @@ GDScript::GDScript() :
 		GDScriptLanguage::get_singleton()->lock->unlock();
 	}
 #endif
+
+#ifndef NO_THREADS
+	mutex = Mutex::create();
+#endif
 }
 
 GDScript::~GDScript() {
+#ifndef NO_THREADS
+	memdelete(mutex);
+#endif
 	for (Map<StringName, GDScriptFunction *>::Element *E = member_functions.front(); E; E = E->next()) {
 		memdelete(E->get());
 	}

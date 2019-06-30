@@ -33,6 +33,7 @@
 
 #include "core/io/resource_loader.h"
 #include "core/io/resource_saver.h"
+#include "core/os/mutex.h"
 #include "core/script_language.h"
 #include "gdscript_function.h"
 
@@ -87,7 +88,6 @@ class GDScript : public Script {
 	Map<StringName, Vector<StringName> > _signals;
 
 #ifdef TOOLS_ENABLED
-
 	Map<StringName, int> member_lines;
 
 	Map<StringName, Variant> member_default_values;
@@ -99,8 +99,8 @@ class GDScript : public Script {
 	bool source_changed_cache;
 	bool placeholder_fallback_enabled;
 	void _update_exports_values(Map<StringName, Variant> &values, List<PropertyInfo> &propnames);
-
 #endif
+
 	Map<StringName, PropertyInfo> member_info;
 
 	GDScriptFunction *initializer; //direct pointer to _init , faster to locate
@@ -113,6 +113,10 @@ class GDScript : public Script {
 	String name;
 	SelfList<GDScript> script_list;
 
+#ifndef NO_THREADS
+	Mutex *mutex;
+#endif
+
 	GDScriptInstance *_create_instance(const Variant **p_args, int p_argcount, Object *p_owner, bool p_isref, Variant::CallError &r_error);
 
 	void _set_subclass_path(Ref<GDScript> &p_sc, const String &p_path);
@@ -124,9 +128,7 @@ class GDScript : public Script {
 #endif
 
 #ifdef DEBUG_ENABLED
-
 	Map<ObjectID, List<Pair<StringName, Variant> > > pending_reload_state;
-
 #endif
 
 	bool _update_exports();
