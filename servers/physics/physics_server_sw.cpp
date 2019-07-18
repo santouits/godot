@@ -101,6 +101,46 @@ RID PhysicsServerSW::shape_create(ShapeType p_shape) {
 	return id;
 };
 
+RID PhysicsServerSw::plane_shape_create() {
+	return shape_create(SHAPE_PLANE);
+};
+
+RID PhysicsServerSw::ray_shape_create() {
+	return shape_create(SHAPE_RAY);
+};
+
+RID PhysicsServerSw::sphere_shape_create() {
+	return shape_create(SHAPE_SPHERE);
+};
+
+RID PhysicsServerSw::box_shape_create() {
+	return shape_create(SHAPE_BOX);
+};
+
+RID PhysicsServerSw::capsule_shape_create() {
+	return shape_create(SHAPE_CAPSULE);
+};
+
+RID PhysicsServerSw::cylinder_shape_create() {
+	return shape_create(SHAPE_CYLINDER);
+};
+
+RID PhysicsServerSw::convex_polygon_shape_create() {
+	return shape_create(SHAPE_CONVEX_POLYGON);
+};
+
+RID PhysicsServerSw::concave_polygon_shape_create() {
+	return shape_create(SHAPE_CONCAVE_POLYGON);
+};
+
+RID PhysicsServerSw::heightmap_shape_create() {
+	return shape_create(SHAPE_HEIGHTMAP);
+};
+
+RID PhysicsServerSw::custom_shape_create() {
+	return shape_create(SHAPE_CUSTOM);
+};
+
 void PhysicsServerSW::shape_set_data(RID p_shape, const Variant &p_data) {
 
 	ShapeSW *shape = shape_owner.get(p_shape);

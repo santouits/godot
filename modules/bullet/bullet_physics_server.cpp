@@ -133,6 +133,46 @@ RID BulletPhysicsServer::shape_create(ShapeType p_shape) {
 	CreateThenReturnRID(shape_owner, shape)
 }
 
+RID BulletPhysicsServer::plane_shape_create() {
+	return shape_create(SHAPE_PLANE);
+};
+
+RID BulletPhysicsServer::ray_shape_create() {
+	return shape_create(SHAPE_RAY);
+};
+
+RID BulletPhysicsServer::sphere_shape_create() {
+	return shape_create(SHAPE_SPHERE);
+};
+
+RID BulletPhysicsServer::box_shape_create() {
+	return shape_create(SHAPE_BOX);
+};
+
+RID BulletPhysicsServer::capsule_shape_create() {
+	return shape_create(SHAPE_CAPSULE);
+};
+
+RID BulletPhysicsServer::cylinder_shape_create() {
+	return shape_create(SHAPE_CYLINDER);
+};
+
+RID BulletPhysicsServer::convex_polygon_shape_create() {
+	return shape_create(SHAPE_CONVEX_POLYGON);
+};
+
+RID BulletPhysicsServer::concave_polygon_shape_create() {
+	return shape_create(SHAPE_CONCAVE_POLYGON);
+};
+
+RID BulletPhysicsServer::heightmap_shape_create() {
+	return shape_create(SHAPE_HEIGHTMAP);
+};
+
+RID BulletPhysicsServer::custom_shape_create() {
+	return shape_create(SHAPE_CUSTOM);
+};
+
 void BulletPhysicsServer::shape_set_data(RID p_shape, const Variant &p_data) {
 	ShapeBullet *shape = shape_owner.get(p_shape);
 	ERR_FAIL_COND(!shape);

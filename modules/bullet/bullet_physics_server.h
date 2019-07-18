@@ -88,6 +88,18 @@ public:
 
 	/* SHAPE API */
 	virtual RID shape_create(ShapeType p_shape);
+
+	virtual RID plane_shape_create();
+	virtual RID ray_shape_create();
+	virtual RID sphere_shape_create();
+	virtual RID box_shape_create();
+	virtual RID capsule_shape_create();
+	virtual RID cylinder_shape_create();
+	virtual RID convex_polygon_shape_create();
+	virtual RID concave_polygon_shape_create();
+	virtual RID heightmap_shape_create();
+	virtual RID custom_shape_create();
+
 	virtual void shape_set_data(RID p_shape, const Variant &p_data);
 	virtual ShapeType shape_get_type(RID p_shape) const;
 	virtual Variant shape_get_data(RID p_shape) const;

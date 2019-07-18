@@ -82,6 +82,18 @@ public:
 	static void _shape_col_cbk(const Vector3 &p_point_A, const Vector3 &p_point_B, void *p_userdata);
 
 	virtual RID shape_create(ShapeType p_shape);
+
+	virtual RID plane_shape_create();
+	virtual RID ray_shape_create();
+	virtual RID sphere_shape_create();
+	virtual RID box_shape_create();
+	virtual RID capsule_shape_create();
+	virtual RID cylinder_shape_create();
+	virtual RID convex_polygon_shape_create();
+	virtual RID concave_polygon_shape_create();
+	virtual RID heightmap_shape_create();
+	virtual RID custom_shape_create();
+
 	virtual void shape_set_data(RID p_shape, const Variant &p_data);
 	virtual void shape_set_custom_solver_bias(RID p_shape, real_t p_bias);
 
