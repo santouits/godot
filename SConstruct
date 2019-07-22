@@ -244,6 +244,7 @@ else:
         print("Automatically detected platform: " + selected_platform)
         env_base["platform"] = selected_platform
 
+
 if selected_platform in platform_list:
     tmppath = "./platform/" + selected_platform
     sys.path.insert(0, tmppath)
@@ -549,6 +550,7 @@ elif selected_platform != "":
         sys.exit(0)
     else:
         sys.exit(255)
+
 
 # The following only makes sense when the env is defined, and assumes it is
 if 'env' in locals():

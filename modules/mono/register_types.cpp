@@ -62,8 +62,10 @@ void register_mono_types() {
 void unregister_mono_types() {
 	ScriptServer::unregister_language(script_language_cs);
 
-	if (script_language_cs)
+	if (script_language_cs) {
 		memdelete(script_language_cs);
+		//	script_language_cs = NULL;
+	}
 
 	ResourceLoader::remove_resource_format_loader(resource_loader_cs);
 	resource_loader_cs.unref();
@@ -71,6 +73,8 @@ void unregister_mono_types() {
 	ResourceSaver::remove_resource_format_saver(resource_saver_cs);
 	resource_saver_cs.unref();
 
-	if (_godotsharp)
+	if (_godotsharp) {
 		memdelete(_godotsharp);
+		//	_godotsharp = NULL;
+	}
 }
