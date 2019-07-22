@@ -38,6 +38,7 @@
 #include "core/math/crypto_core.h"
 #include "core/math/random_number_generator.h"
 #include "core/os/os.h"
+#include "core/print_string.h"
 
 String WSLPeer::generate_key() {
 	// Random key

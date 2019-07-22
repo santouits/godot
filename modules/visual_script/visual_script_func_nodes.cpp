@@ -30,6 +30,10 @@
 
 #include "visual_script_func_nodes.h"
 
+#ifdef DEBUG_ENABLED
+#define DEBUG_METHODS_ENABLED
+#endif
+
 #include "core/engine.h"
 #include "core/io/resource_loader.h"
 #include "core/os/os.h"

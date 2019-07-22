@@ -31,6 +31,10 @@
 #ifndef GET_TYPE_INFO_H
 #define GET_TYPE_INFO_H
 
+#ifdef DEBUG_ENABLED
+#define DEBUG_METHODS_ENABLED
+#endif
+
 #ifdef DEBUG_METHODS_ENABLED
 
 template <bool C, typename T = void>

@@ -30,6 +30,10 @@
 
 #include "nativescript.h"
 
+#ifdef DEBUG_ENABLED
+#define DEBUG_METHODS_ENABLED
+#endif
+
 #include "gdnative/gdnative.h"
 
 #include "core/core_string_names.h"

@@ -33,6 +33,8 @@
 
 #include "scene/3d/spatial.h"
 
+class Environment;
+
 /**
 	@author Juan Linietsky <reduzio@gmail.com>
 */

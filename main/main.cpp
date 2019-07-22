@@ -30,6 +30,10 @@
 
 #include "main.h"
 
+#ifdef DEBUG_ENABLED
+#define DEBUG_METHODS_ENABLED
+#endif
+
 #include "core/input_map.h"
 #include "core/io/file_access_network.h"
 #include "core/io/file_access_pack.h"

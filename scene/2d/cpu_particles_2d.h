@@ -33,7 +33,8 @@
 
 #include "core/rid.h"
 #include "scene/2d/node_2d.h"
-#include "scene/resources/texture.h"
+
+class Texture;
 
 /**
 	@author Juan Linietsky <reduzio@gmail.com>

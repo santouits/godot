@@ -32,6 +32,11 @@
 
 #include <mono/metadata/threads.h>
 
+#ifdef DEBUG_ENABLED
+#define DEBUG_METHODS_ENABLED
+#endif
+
+#include "core/engine.h"
 #include "core/io/json.h"
 #include "core/os/file_access.h"
 #include "core/os/os.h"

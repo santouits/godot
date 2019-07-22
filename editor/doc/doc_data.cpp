@@ -30,11 +30,16 @@
 
 #include "doc_data.h"
 
+#ifdef DEBUG_ENABLED
+#define DEBUG_METHODS_ENABLED
+#endif
+
 #include "core/engine.h"
 #include "core/global_constants.h"
 #include "core/io/compression.h"
 #include "core/io/marshalls.h"
 #include "core/os/dir_access.h"
+#include "core/os/file_access.h"
 #include "core/project_settings.h"
 #include "core/script_language.h"
 #include "core/version.h"

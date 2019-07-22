@@ -30,9 +30,15 @@
 
 #include "gdscript.h"
 
+#ifdef DEBUG_ENABLED
+#define DEBUG_METHODS_ENABLED
+#endif
+
 #include "core/engine.h"
 #include "core/global_constants.h"
 #include "core/os/file_access.h"
+#include "core/print_string.h"
+#include "core/project_settings.h"
 #include "gdscript_compiler.h"
 
 #ifdef TOOLS_ENABLED

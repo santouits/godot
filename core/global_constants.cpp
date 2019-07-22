@@ -30,6 +30,10 @@
 
 #include "global_constants.h"
 
+#ifdef DEBUG_ENABLED
+#define DEBUG_METHODS_ENABLED
+#endif
+
 #include "core/object.h"
 #include "core/os/input_event.h"
 #include "core/os/keyboard.h"
