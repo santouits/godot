@@ -31,12 +31,18 @@
 #ifndef CAMERA_MATRIX_H
 #define CAMERA_MATRIX_H
 
-#include "core/math/rect2.h"
-#include "core/math/transform.h"
-
 /**
 	@author Juan Linietsky <reduzio@gmail.com>
 */
+
+#include "core/math/math_defs.h"
+#include "core/math/plane.h"
+#include "core/math/vector2.h"
+#include "core/math/vector3.h"
+
+class AABB;
+struct Rect2;
+class Transform;
 
 struct CameraMatrix {
 

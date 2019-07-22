@@ -31,8 +31,8 @@
 #ifndef ASTAR_H
 #define ASTAR_H
 
+#include "core/map.h"
 #include "core/reference.h"
-#include "core/self_list.h"
 
 /**
 	A* pathfinding algorithm

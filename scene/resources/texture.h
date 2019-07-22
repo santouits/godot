@@ -33,14 +33,15 @@
 
 #include "core/io/resource_loader.h"
 #include "core/math/rect2.h"
-#include "core/os/mutex.h"
-#include "core/os/rw_lock.h"
-#include "core/os/thread_safe.h"
 #include "core/resource.h"
 #include "scene/resources/curve.h"
 #include "scene/resources/gradient.h"
 #include "servers/camera_server.h"
 #include "servers/visual_server.h"
+
+class BitMap;
+class Mesh;
+class RWLock;
 
 /**
 	@author Juan Linietsky <reduzio@gmail.com>
@@ -88,8 +89,6 @@ public:
 };
 
 VARIANT_ENUM_CAST(Texture::Flags);
-
-class BitMap;
 
 class ImageTexture : public Texture {
 
@@ -292,8 +291,6 @@ public:
 
 	AtlasTexture();
 };
-
-class Mesh;
 
 class MeshTexture : public Texture {
 

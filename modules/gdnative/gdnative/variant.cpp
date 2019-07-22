@@ -30,6 +30,7 @@
 
 #include "gdnative/variant.h"
 
+#include "core/method_bind.h"
 #include "core/reference.h"
 #include "core/variant.h"
 

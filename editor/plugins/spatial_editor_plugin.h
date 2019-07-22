@@ -42,6 +42,7 @@
 */
 
 class Camera;
+class Environment;
 class SpatialEditor;
 class EditorSpatialGizmoPlugin;
 

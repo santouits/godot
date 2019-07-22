@@ -33,7 +33,7 @@
 
 #include "core/resource.h"
 #include "scene/resources/texture.h"
-#include "servers/visual_server.h"
+
 /**
 	@author Juan Linietsky <reduzio@gmail.com>
 */

@@ -178,14 +178,13 @@ def configure_msvc(env, manual_msvc_config):
             env.Append(CCFLAGS=['/O2'])
         else: # optimize for size
             env.Append(CCFLAGS=['/O1'])
-        env.AppendUnique(CPPDEFINES = ['DEBUG_ENABLED'])
+        env.AppendUnique(CPPDEFINES = ['DEBUG_ENABLED', 'DEBUG_METHODS_ENABLED'])
         env.Append(LINKFLAGS=['/SUBSYSTEM:CONSOLE'])
         env.Append(LINKFLAGS=['/OPT:REF'])
 
     elif (env["target"] == "debug"):
         env.AppendUnique(CCFLAGS=['/Z7', '/Od', '/EHsc'])
-        env.AppendUnique(CPPDEFINES = ['DEBUG_ENABLED', 'DEBUG_MEMORY_ENABLED',
-                                       'D3D_DEBUG_INFO'])
+        env.AppendUnique(CPPDEFINES = ['DEBUG_ENABLED', 'DEBUG_MEMORY_ENABLED', 'DEBUG_METHODS_ENABLED', 'D3D_DEBUG_INFO'])
         env.Append(LINKFLAGS=['/SUBSYSTEM:CONSOLE'])
         env.Append(LINKFLAGS=['/DEBUG'])
 
@@ -274,7 +273,7 @@ def configure_mingw(env):
 
     elif (env["target"] == "release_debug"):
         env.Append(CCFLAGS=['-O2'])
-        env.Append(CPPDEFINES=['DEBUG_ENABLED'])
+        env.Append(CPPDEFINES=['DEBUG_ENABLED', 'DEBUG_METHODS_ENABLED'])
         if (env["debug_symbols"] == "yes"):
            env.Prepend(CCFLAGS=['-g1'])
         if (env["debug_symbols"] == "full"):
@@ -286,7 +285,7 @@ def configure_mingw(env):
 
     elif (env["target"] == "debug"):
         env.Append(CCFLAGS=['-g3'])
-        env.Append(CPPDEFINES=['DEBUG_ENABLED', 'DEBUG_MEMORY_ENABLED'])
+        env.Append(CPPDEFINES=['DEBUG_ENABLED', 'DEBUG_MEMORY_ENABLED', 'DEBUG_METHODS_ENABLED'])
 
     ## Compiler configuration
 

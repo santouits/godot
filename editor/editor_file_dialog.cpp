@@ -29,10 +29,12 @@
 /*************************************************************************/
 
 #include "editor_file_dialog.h"
+
 #include "core/os/file_access.h"
 #include "core/os/keyboard.h"
 #include "core/os/os.h"
 #include "core/print_string.h"
+#include "core/project_settings.h"
 #include "dependency_editor.h"
 #include "editor_resource_preview.h"
 #include "editor_scale.h"

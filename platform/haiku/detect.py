@@ -44,14 +44,14 @@ def configure(env):
             env.Prepend(CCFLAGS=['-g2'])
 
     elif (env["target"] == "release_debug"):
-        env.Prepend(CCFLAGS=['-O2', '-DDEBUG_ENABLED'])
+        env.Prepend(CCFLAGS=['-O2', '-DDEBUG_ENABLED', '-DDEBUG_METHODS_ENABLED'])
         if (env["debug_symbols"] == "yes"):
             env.Prepend(CCFLAGS=['-g1'])
         if (env["debug_symbols"] == "full"):
             env.Prepend(CCFLAGS=['-g2'])
 
     elif (env["target"] == "debug"):
-        env.Prepend(CCFLAGS=['-g3', '-DDEBUG_ENABLED', '-DDEBUG_MEMORY_ENABLED'])
+        env.Prepend(CCFLAGS=['-g3', '-DDEBUG_ENABLED', '-DDEBUG_MEMORY_ENABLED', '-DDEBUG_METHODS_ENABLED'])
 
     ## Architecture
 

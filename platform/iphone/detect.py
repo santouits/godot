@@ -52,11 +52,11 @@ def configure(env):
             env.Append(LINKFLAGS=['-Os'])
 
         if env["target"] == "release_debug":
-            env.Append(CPPDEFINES=['DEBUG_ENABLED'])
+            env.Append(CPPDEFINES=['DEBUG_ENABLED', 'DEBUG_METHODS_ENABLED'])
 
     elif (env["target"] == "debug"):
         env.Append(CCFLAGS=['-gdwarf-2', '-O0'])
-        env.Append(CPPDEFINES=['_DEBUG', ('DEBUG', 1), 'DEBUG_ENABLED', 'DEBUG_MEMORY_ENABLED'])
+        env.Append(CPPDEFINES=['_DEBUG', ('DEBUG', 1), 'DEBUG_ENABLED', 'DEBUG_MEMORY_ENABLED', 'DEBUG_METHODS_ENABLED'])
 
     if (env["use_lto"]):
         env.Append(CCFLAGS=['-flto'])

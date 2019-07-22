@@ -60,13 +60,13 @@ def configure(env):
     elif (env["target"] == "release_debug"):
         env.Append(CCFLAGS=['/O2', '/Zi'])
         env.Append(CCFLAGS=['/MD'])
-        env.Append(CPPDEFINES=['DEBUG_ENABLED'])
+        env.Append(CPPDEFINES=['DEBUG_ENABLED', 'DEBUG_METHODS_ENABLED'])
         env.Append(LINKFLAGS=['/SUBSYSTEM:CONSOLE'])
 
     elif (env["target"] == "debug"):
         env.Append(CCFLAGS=['/Zi'])
         env.Append(CCFLAGS=['/MDd'])
-        env.Append(CPPDEFINES=['DEBUG_ENABLED', 'DEBUG_MEMORY_ENABLED'])
+        env.Append(CPPDEFINES=['DEBUG_ENABLED', 'DEBUG_MEMORY_ENABLED', 'DEBUG_METHODS_ENABLED'])
         env.Append(LINKFLAGS=['/SUBSYSTEM:CONSOLE'])
         env.Append(LINKFLAGS=['/DEBUG'])
 

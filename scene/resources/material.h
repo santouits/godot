@@ -35,8 +35,7 @@
 #include "core/self_list.h"
 #include "scene/resources/shader.h"
 #include "scene/resources/texture.h"
-#include "servers/visual/shader_language.h"
-#include "servers/visual_server.h"
+
 /**
 	@author Juan Linietsky <reduzio@gmail.com>
 */

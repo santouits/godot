@@ -34,6 +34,8 @@
 #include "scene/main/node.h"
 #include "scene/main/scene_tree.h"
 
+class World;
+
 /**
 	@author Juan Linietsky <reduzio@gmail.com>
 */

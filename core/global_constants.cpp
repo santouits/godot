@@ -30,6 +30,7 @@
 
 #include "global_constants.h"
 
+#include "core/method_bind.h"
 #include "core/object.h"
 #include "core/os/input_event.h"
 #include "core/os/keyboard.h"

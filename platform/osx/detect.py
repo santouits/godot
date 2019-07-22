@@ -56,7 +56,7 @@ def configure(env):
             env.Prepend(CCFLAGS=['-O2'])
         else: #optimize for size
             env.Prepend(CCFLAGS=['-Os'])
-        env.Prepend(CPPDEFINES=['DEBUG_ENABLED'])
+        env.Prepend(CPPDEFINES=['DEBUG_ENABLED', 'DEBUG_METHODS_ENABLED'])
         if (env["debug_symbols"] == "yes"):
             env.Prepend(CCFLAGS=['-g1'])
         if (env["debug_symbols"] == "full"):
@@ -64,7 +64,7 @@ def configure(env):
 
     elif (env["target"] == "debug"):
         env.Prepend(CCFLAGS=['-g3'])
-        env.Prepend(CPPDEFINES=['DEBUG_ENABLED', 'DEBUG_MEMORY_ENABLED'])
+        env.Prepend(CPPDEFINES=['DEBUG_ENABLED', 'DEBUG_MEMORY_ENABLED', 'DEBUG_METHODS_ENABLED'])
 
     ## Architecture
 

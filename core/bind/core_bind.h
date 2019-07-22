@@ -31,15 +31,12 @@
 #ifndef CORE_BIND_H
 #define CORE_BIND_H
 
-#include "core/image.h"
 #include "core/io/compression.h"
-#include "core/io/resource_loader.h"
-#include "core/io/resource_saver.h"
-#include "core/os/dir_access.h"
-#include "core/os/file_access.h"
-#include "core/os/os.h"
-#include "core/os/semaphore.h"
-#include "core/os/thread.h"
+#include "core/resource.h"
+
+class Image; // for _OS
+class MainLoop; // for _OS
+class ResourceInteractiveLoader;
 
 class _ResourceLoader : public Object {
 	GDCLASS(_ResourceLoader, Object);
@@ -92,8 +89,6 @@ public:
 };
 
 VARIANT_ENUM_CAST(_ResourceSaver::SaverFlags);
-
-class MainLoop;
 
 class _OS : public Object {
 	GDCLASS(_OS, Object);
@@ -457,6 +452,8 @@ VARIANT_ENUM_CAST(_Geometry::PolyBooleanOperation);
 VARIANT_ENUM_CAST(_Geometry::PolyJoinType);
 VARIANT_ENUM_CAST(_Geometry::PolyEndType);
 
+class FileAccess;
+
 class _File : public Reference {
 
 	GDCLASS(_File, Reference);
@@ -559,6 +556,8 @@ public:
 VARIANT_ENUM_CAST(_File::ModeFlags);
 VARIANT_ENUM_CAST(_File::CompressionMode);
 
+class DirAccess;
+
 class _Directory : public Reference {
 
 	GDCLASS(_Directory, Reference);
@@ -644,6 +643,8 @@ public:
 	~_Mutex();
 };
 
+class Semaphore;
+
 class _Semaphore : public Reference {
 
 	GDCLASS(_Semaphore, Reference);
@@ -658,6 +659,8 @@ public:
 	_Semaphore();
 	~_Semaphore();
 };
+
+class Thread;
 
 class _Thread : public Reference {
 

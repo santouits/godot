@@ -33,6 +33,7 @@
 #include "core/core_string_names.h"
 #include "core/engine.h"
 #include "core/io/resource_loader.h"
+#include "core/method_bind.h"
 #include "core/os/file_access.h"
 #include "core/print_string.h"
 #include "core/project_settings.h"

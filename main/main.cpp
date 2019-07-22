@@ -40,6 +40,7 @@
 #include "core/io/stream_peer_ssl.h"
 #include "core/io/stream_peer_tcp.h"
 #include "core/message_queue.h"
+#include "core/method_bind.h"
 #include "core/os/dir_access.h"
 #include "core/os/os.h"
 #include "core/project_settings.h"
