@@ -34,6 +34,7 @@
 #include "core/list.h"
 #include "core/method_ptrcall.h"
 #include "core/object.h"
+#include "core/type_info.h"
 #include "core/variant.h"
 
 #include <stdio.h>
@@ -41,12 +42,6 @@
 /**
 	@author Juan Linietsky <reduzio@gmail.com>
 */
-
-#ifdef DEBUG_ENABLED
-#define DEBUG_METHODS_ENABLED
-#endif
-
-#include "core/type_info.h"
 
 enum MethodFlags {
 

@@ -378,17 +378,18 @@ if selected_platform in platform_list:
             sys.exit(255)
         suffix += ".opt"
         env.Append(CPPDEFINES=['NDEBUG'])
-
     elif (env["target"] == "release_debug"):
         if env["tools"]:
             suffix += ".opt.tools"
         else:
             suffix += ".opt.debug"
+        env.Append(CPPDEFINES=['DEBUG_METHODS_ENABLED'])
     else:
         if env["tools"]:
             suffix += ".tools"
         else:
             suffix += ".debug"
+        env.Append(CPPDEFINES=['DEBUG_METHODS_ENABLED'])
 
     if env["arch"] != "":
         suffix += "." + env["arch"]
