@@ -67,13 +67,39 @@ vendor vendormap[] = {
 	{ NULL, 0 }
 };
 
+Display *x11_display = NULL;
+Window x11_window = 0; // typedefed unsigned long int
+Colormap colormap = 0;
+GLXContext glx_context = 0;
+XVisualInfo *vi = NULL;
+
+void destroy_context() {
+	if (x11_display)
+		glXMakeCurrent(x11_display, 0, 0);
+	if (x11_window)
+		XDestroyWindow(x11_display, x11_window);
+	if (colormap)
+		XFreeColormap(x11_display, colormap);
+	if (glx_context)
+		glXDestroyContext(x11_display, glx_context);
+	if (vi)
+		XFree(vi);
+	if (x11_display)
+		XCloseDisplay(x11_display);
+
+	x11_display = NULL;
+	x11_window = 0;
+	colormap = 0;
+	glx_context = 0;
+	vi = NULL;
+};
+
 // Runs inside a child. Exiting will not quit the engine.
 void create_context() {
-	Display *x11_display = XOpenDisplay(NULL);
-	Window x11_window;
-	GLXContext glx_context;
+	x11_display = XOpenDisplay(NULL);
 
-	GLXCREATECONTEXTATTRIBSARBPROC glXCreateContextAttribsARB = (GLXCREATECONTEXTATTRIBSARBPROC)glXGetProcAddress((const GLubyte *)"glXCreateContextAttribsARB");
+	GLXCREATECONTEXTATTRIBSARBPROC glXCreateContextAttribsARB = 0; 
+	glXCreateContextAttribsARB = (GLXCREATECONTEXTATTRIBSARBPROC)glXGetProcAddress((const GLubyte *)"glXCreateContextAttribsARB");
 
 	static int visual_attribs[] = {
 		GLX_RENDER_TYPE, GLX_RGBA_BIT,
@@ -87,21 +113,22 @@ void create_context() {
 	};
 
 	int fbcount;
-	GLXFBConfig fbconfig = 0;
-	XVisualInfo *vi = NULL;
-
-	XSetWindowAttributes swa;
-	swa.event_mask = StructureNotifyMask;
-	swa.border_pixel = 0;
-	unsigned long valuemask = CWBorderPixel | CWColormap | CWEventMask;
 
 	GLXFBConfig *fbc = glXChooseFBConfig(x11_display, DefaultScreen(x11_display), visual_attribs, &fbcount);
-	if (!fbc)
+	if (!fbc) {
+		destroy_context();
 		exit(1);
+	}
 
-	vi = glXGetVisualFromFBConfig(x11_display, fbc[0]);
+	GLXFBConfig fbconfig = fbc[0];
+	XFree(fbc); // free the list
 
-	fbconfig = fbc[0];
+	vi = glXGetVisualFromFBConfig(x11_display, fbconfig);
+	if (!vi) {
+		destroy_context();
+		exit(1);
+	}
+
 
 	static int context_attribs[] = {
 		GLX_CONTEXT_MAJOR_VERSION_ARB, 3,
@@ -112,15 +139,34 @@ void create_context() {
 	};
 
 	glx_context = glXCreateContextAttribsARB(x11_display, fbconfig, NULL, true, context_attribs);
+	if (!glx_context) {
+		destroy_context();
+		exit(1);
+	}
 
-	swa.colormap = XCreateColormap(x11_display, RootWindow(x11_display, vi->screen), vi->visual, AllocNone);
+	colormap = XCreateColormap(x11_display, RootWindow(x11_display, vi->screen), vi->visual, AllocNone);
+	if (!colormap) {
+		destroy_context();
+		exit(1);
+	}
+
+	XSetWindowAttributes swa;
+	swa.colormap = colormap;
+	swa.event_mask = StructureNotifyMask;
+	swa.border_pixel = 0;
+	unsigned long valuemask = CWBorderPixel | CWColormap | CWEventMask;
+
 	x11_window = XCreateWindow(x11_display, RootWindow(x11_display, vi->screen), 0, 0, 10, 10, 0, vi->depth, InputOutput, vi->visual, valuemask, &swa);
 
-	if (!x11_window)
+	if (!x11_window) {
+		destroy_context();
 		exit(1);
+	}
 
-	glXMakeCurrent(x11_display, x11_window, glx_context);
-	XFree(vi);
+	if(!glXMakeCurrent(x11_display, x11_window, glx_context)) {
+		destroy_context();
+		exit(1);
+	}
 }
 
 int detect_prime() {
@@ -195,6 +241,7 @@ int detect_prime() {
 				print_verbose("Couldn't write vendor/renderer string.");
 			}
 			close(fdset[1]);
+			destroy_context();
 			exit(0);
 		}
 	}
@@ -203,6 +250,7 @@ int detect_prime() {
 	int priority = 0;
 
 	if (vendors[0] == vendors[1]) {
+		destroy_context();
 		print_verbose("Only one GPU found, using default.");
 		return 0;
 	}
@@ -228,6 +276,7 @@ int detect_prime() {
 	}
 
 	print_verbose("Using renderer: " + renderers[preferred]);
+	destroy_context();
 	return preferred;
 }
 
