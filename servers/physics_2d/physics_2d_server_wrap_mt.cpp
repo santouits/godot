@@ -54,6 +54,7 @@ void Physics2DServerWrapMT::thread_loop() {
 
 	server_thread = Thread::get_caller_id();
 
+	print_verbose("phys loop");
 	OS::get_singleton()->make_rendering_thread();
 
 	physics_2d_server->init();

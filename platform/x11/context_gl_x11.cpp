@@ -43,6 +43,8 @@
 #define GLX_CONTEXT_MAJOR_VERSION_ARB 0x2091
 #define GLX_CONTEXT_MINOR_VERSION_ARB 0x2092
 
+#include "core/print_string.h"
+
 typedef GLXContext (*GLXCREATECONTEXTATTRIBSARBPROC)(Display *, GLXFBConfig, GLXContext, Bool, const int *);
 
 struct ContextGL_X11_Private {
@@ -56,8 +58,11 @@ void ContextGL_X11::release_current() {
 }
 
 void ContextGL_X11::make_current() {
+	print_verbose("make current");
 
-	glXMakeCurrent(x11_display, x11_window, p->glx_context);
+	int succeded = glXMakeCurrent(x11_display, x11_window, p->glx_context);
+
+	print_verbose(itos(succeded));
 }
 
 void ContextGL_X11::swap_buffers() {

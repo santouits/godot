@@ -61,6 +61,7 @@ void VisualServerWrapMT::thread_loop() {
 
 	server_thread = Thread::get_caller_id();
 
+	print_verbose("vis loop");
 	OS::get_singleton()->make_rendering_thread();
 
 	visual_server->init();
