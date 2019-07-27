@@ -67,6 +67,7 @@ void VisualServerWrapMT::thread_loop() {
 
 	exit = false;
 	draw_thread_up = true;
+
 	while (!exit) {
 		// flush commands one by one, until exit is requested
 		command_queue.wait_and_flush_one();
@@ -75,6 +76,8 @@ void VisualServerWrapMT::thread_loop() {
 	command_queue.flush_all(); // flush all
 
 	visual_server->finish();
+
+	OS::get_singleton()->release_rendering_thread();
 }
 
 /* EVENT QUEUING */
@@ -108,11 +111,13 @@ void VisualServerWrapMT::init() {
 	if (create_thread) {
 
 		print_verbose("VisualServerWrapMT: Creating render thread");
+
+		// Releasing opengl context from the main thread, no drawing will happen in that.
 		OS::get_singleton()->release_rendering_thread();
-		if (create_thread) {
-			thread = Thread::create(_thread_callback, this);
-			print_verbose("VisualServerWrapMT: Starting render thread");
-		}
+
+		thread = Thread::create(_thread_callback, this);
+		print_verbose("VisualServerWrapMT: Starting render thread");
+
 		while (!draw_thread_up) {
 			OS::get_singleton()->delay_usec(1000);
 		}
@@ -125,14 +130,14 @@ void VisualServerWrapMT::init() {
 
 void VisualServerWrapMT::finish() {
 
-	if (thread) {
+	if (create_thread) {
 
 		command_queue.push(this, &VisualServerWrapMT::thread_exit);
 		Thread::wait_to_finish(thread);
 		memdelete(thread);
-
 		thread = NULL;
 	} else {
+
 		visual_server->finish();
 	}
 
@@ -192,5 +197,4 @@ VisualServerWrapMT::~VisualServerWrapMT() {
 
 	memdelete(visual_server);
 	memdelete(alloc_mutex);
-	//finish();
 }
