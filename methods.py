@@ -579,9 +579,10 @@ def add_shared_library(env, name, sources, **args):
     return library
 
 def add_library(env, name, sources, **args):
-    library = env.Library(name, sources, **args)
+    new_name = "godot" + name
+    library = env.Library(new_name, sources, **args)
     env.NoCache(library)
-    return library
+    return new_name
 
 def add_program(env, name, sources, **args):
     program = env.Program(name, sources, **args)
