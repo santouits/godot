@@ -183,6 +183,9 @@ env.CommandNoCache(
     env.Run(core_builders.make_license_header, "Generating license header."),
 )
 
+core_env = env.Clone()
+core_env.Prepend(CXXFLAGS=["-I. -include core/pch.h.gch"])
+
 # Chain load SCsubs
 SConscript("os/SCsub")
 SConscript("math/SCsub")
@@ -192,7 +195,9 @@ SConscript("debugger/SCsub")
 SConscript("input/SCsub")
 SConscript("bind/SCsub")
 
+dep = env.add_header(None, "pch.h")
+env.Depends("#platform/linuxbsd/godot_linuxbsd.cpp", dep)
 
 # Build it all as a library
-lib = env.add_library("core", env.core_sources)
+lib = core_env.add_library("core", env.core_sources)
 env.Prepend(LIBS=[lib])

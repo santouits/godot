@@ -64,6 +64,13 @@ elif platform_arg == "javascript":
     custom_tools = ["cc", "c++", "ar", "link", "textfile", "zip"]
 
 env_base = Environment(tools=custom_tools)
+
+bld = Builder(action = '$CXX -o $TARGET $CCFLAGS $_CCCOMCOM $SOURCE',
+        suffix = ".h.gch",
+        src_suffix = ".h")
+env_base.Append(BUILDERS = { 'add_header' : bld})
+
+
 if "TERM" in os.environ:
     env_base["ENV"]["TERM"] = os.environ["TERM"]
 env_base.AppendENVPath("PATH", os.getenv("PATH"))

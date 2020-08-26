@@ -21,6 +21,9 @@ env_thirdparty.add_source_files(env.scene_sources, thirdparty_sources)
 # Godot's own sources
 env.add_source_files(env.scene_sources, "*.cpp")
 
+scene_env = env.Clone()
+scene_env.Prepend(CXXFLAGS=["-I. -include core/pch.h.gch"])
+Export("scene_env")
 
 # Chain load SCsubs
 SConscript("main/SCsub")
@@ -34,5 +37,5 @@ SConscript("debugger/SCsub")
 
 
 # Build it all as a library
-lib = env.add_library("scene", env.scene_sources)
+lib = scene_env.add_library("scene", env.scene_sources)
 env.Prepend(LIBS=[lib])
